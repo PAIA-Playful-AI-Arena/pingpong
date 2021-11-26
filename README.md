@@ -1,90 +1,87 @@
-# PingPong
+# 乒乓球
 
-**Game version: 1.1**
+**遊戲版本：1.1**
 
-## Overview
+## 概觀
 
 <img src="https://i.imgur.com/ke6nUrB.gif" height="500px" />
 
-At the beginning of a round, you could move the platform to decide where to serve the ball and its direction. If the ball is not served in 150 frames, it will be randomly served from the platform. The ball speed starts from 7, and is increased every 100 frames. If the ball speed exceeds 40, this round is a draw game.
+在回合開始時，可以決定發球位置與方向。如果沒有在 150 影格內發球，球會從平台目前位置隨機往左或往右發球。球速從 7 開始，每 100 影格增加 1。如果球速超過 40 卻還沒分出勝負的話，該回合為平手。
 
-There are two mechanisms. One is ball slicing: The x speed of the ball will be changed according to the movement of the platform while the platform catches the ball. The other is a moving blocker at the middle of the game place.
+在不同的難度中加入兩種機制。一個是切球，球的 x 方向速度會因為板子接球時的移動而改變；另一個是在場地中央會有一個移動的障礙物。
 
-## Execution
+## 執行
 
-* Manual mode: `python MLGame.py -m pingpong <difficulty> [game_over_score]`
-    * Serve the ball to the left/right: 1P - `.`, `/`; 2P - `Q`, `E`
-    * Move the platform: 1P - `left`, `right` arrow keys; 2P - `A`, `D`
-* ML mode: `python MLGame.py -i ml_play_template.py pingpong <difficulty> [game_over_score]`
+* 手動模式：`python MLGame.py -m pingpong <difficulty> [game_over_score]`
+    * 將球發往左邊/右邊：1P - `.`、`/`，2P - `Q`、`E`
+    * 移動板子：1P - 左右方向鍵，2P - `A`、`D`
+* 機器學習模式：`python MLGame.py -i ml_play_template.py pingpong <difficulty> [game_over_score]`
 
-### Game Parameters
+### 遊戲參數
 
-* `difficulty`: The game style. There are 3 difficulties.
-    * `EASY`: The simple pingpong game.
-    * `NORMAL`: The ball slicing mechanism is added.
-    * `HARD`: The ball slicing and the blocker mechanism are added.
-* `game_over_score`: [Optional] When the score of either side reaches this value, the game will be exited. The default value is 3. If the `-1` flag is set, it will be 1.
+* `difficulty`：遊戲難度
+    * `EASY`：簡單的乒乓球遊戲
+    * `NORMAL`：加入切球機制
+    * `HARD`：加入切球機制與障礙物
+* `game_over_score`：[選填] 指定遊戲結束的分數。當任一方得到指定的分數時，就結束遊戲。預設是 3，但如果啟動遊戲時有指定 `-1` 選項，則結束分數會是 1。
 
-## Detailed Game Information
+## 詳細遊戲資料
 
-### Game Coordinate
+### 座標系
 
-Same as the game "Arkanoid"
+與打磚塊遊戲一樣
 
-### Game Area
+### 遊戲區域
 
-500 \* 200 pixels
+500 \* 200 像素。1P 在下半部，2P 在上半部
 
-1P side is at the lower half of the game area, and 2P side is at the upper half of the game area.
+### 遊戲物件
 
-### Game Objects
+#### 球
 
-#### Ball
+* 5 \* 5 像素大小的綠色正方形
+* 每場遊戲開始時，都是由 1P 先發球，之後每個回合輪流發球
+* 球由板子的位置發出，可以選擇往左或往右發球。如果沒有在 150 影格內發球，則會自動往隨機一個方向發球
+* 初始球速是每個影格 (&plusmn;7, &plusmn;7)，發球後每 100 影格增加 1
 
-* The ball is a 5-by-5-pixel green square.
-* The ball will be served from the 1P side first, and then change side for each round.
-* The ball is served from the platform, and it can be served to the left or right. If the ball is not served in 150 frames, it will be automatically served to the random direction.
-* The initial moving speed is (&plusmn;7, &plusmn;7) pixels per frame, and it is increased every 100 frames after the ball is served.
+#### 板子
 
-#### Platform
+* 40 \* 30 的矩形，1P 是紅色的，2P 是藍色的
+* 板子移動速度是每個影格 (&plusmn;5, 0)
+* 1P 板子的初始位置在 (80, 420)，2P 則在 (80, 50)
 
-* The platform is a 40-by-30-pixel rectangle.
-* The color of the 1P platform is red, and it of the 2P platform is blue.
-* The moving speed is (&plusmn;5, 0) pixels per frame.
-* The initial position of the 1P platform is at (80, 420), and it of the 2P platform is at (80, 50).
+#### 切球機制
 
-#### Ball Slicing Mechanism
+在板子接球時，球的 x 方向速度會因為板子的移動而改變：
 
-The x speed of the ball is changed according to the movement of the platform while it catches the ball.
+* 如果板子與球往同一個方向移動時，球的 x 方向速度會增加 3 (只增加一次)
+* 如果板子沒有移動，則求的 x 方向速度會恢復為目前的基礎速度
+* 如果板子與球往相反方向移動時，球會被打回原來過來的方向，其 x 方向速度恢復為目前的基礎速度
 
-* If the platform moves in the same direction of the ball, the x speed of the ball is increased by 3 (only once).
-* If the platform is stable, the x speed of the ball is reset to current basic ball speed.
-* If the platform moves in the opposite direction of the ball, the ball will be hit back to the direction where it comes from and the x speed is reset to the current basic ball speed.
+切球機制加入在 `NORMAL` 與 `HARD` 難度中。
 
-The ball slicing mechanism is added on `NORMAL` and `HARD` difficulties.
+#### 障礙物
 
-#### Blocker
+* 30 \* 20 像素的矩形
+* x 初始位置在 0 到 180 之間，每 20 為一單位隨機決定，y 初始位置固定在 240，移動速度為每影格 (&plusmn;5, 0)
+* 障礙物會往復移動，初始移動方向是隨機決定的
+* 障礙物不會切球，球撞到障礙物會保持球的速度
 
-* The blocker is a 30-by-20-pixel rectangle.
-* The initial position of x is randomly choiced from 0 to 180, 20 per step, and the initial position of y is 240. The moving speed is (&plusmn;5, 0) pixels per frame.
-* The blocker will keep moving left and right. The initial direction is random.
-* The blocker doesn't have ball slicing mechanism, which the ball speed is the same after it hits the blocker.
+障礙物加入在 `HARD` 難度中。
 
-The blocker is added on `HARD` difficulty.
+## 撰寫玩遊戲的程式
 
-## Communicate with Game
+程式範例在 [`ml/ml_play_template.py`](ml/ml_play_template.py)。
 
-The example script is in [`ml_play_template.py`](./ml/ml_play_template.py).
+### 初始化參數
 
-### Initial arguments
+* `side`: 字串。其值只會是 `"1P"` 或 `"2P"`，代表這個程式被哪一邊使用。
 
-* `side`: A string which is either `"1P"` or `"2P"` to indicate that the script is used by which side.
+### 溝通物件
 
-### Communication Objects
+#### 遊戲場景資訊
 
-#### Scene Information
-
-A dictionary object sent from the game process.
+由遊戲端發送的字典物件，同時也是存到紀錄檔的物件。
 
 ```
 {
@@ -98,55 +95,56 @@ A dictionary object sent from the game process.
 }
 ```
 
-The keys and values of the scene information:
+以下是該字典物件的鍵值對應：
 
-* `"frame"`: An integer. The number of frame that this scene information is for
-* `"status"`: A string. The game status at this frame. It's one of the following 4 statuses:
-    * `"GAME_ALIVE"`: This round is still going.
-    * `"GAME_1P_WIN"`: 1P wins this round.
-    * `"GAME_2P_WIN"`: 2P wins this round.
-    * `"GAME_DRAW"`: This round is a draw game.
-* `"ball"`: An `(x, y)` tuple. The position of the ball.
-* `"ball_speed"`: An `(x, y)` tuple. The speed of the ball.
-* `"platform_1P"`: An `(x, y)` tuple. The position of the 1P platform.
-* `"platform_2P"`: An `(x, y)` tuple. The position of the 2P platform.
-* `"blocker"`: An `(x, y)` tuple. The position of the blocker. If the game is not on `HARD` difficulty, this field is `None`.
+* `"frame"`：整數。紀錄的是第幾影格的場景資訊
+* `"status"`：字串。目前的遊戲狀態，會是以下的值其中之一：
+    * `"GAME_ALIVE"`：遊戲正在進行中
+    * `"GAME_1P_WIN"`：這回合 1P 獲勝
+    * `"GAME_2P_WIN"`：這回合 2P 獲勝
+    * `"GAME_DRAW"`：這回合平手
+* `"ball"`：`(x, y)` tuple。球的位置。
+* `"ball_speed"`：`(x, y)` tuple。目前的球速。
+* `"platform_1P"`：`(x, y)` tuple。1P 板子的位置。
+* `"platform_2P"`：`(x, y)` tuple。2P 板子的位置。
+* `"blocker"`：`(x, y)` tuple。障礙物的位置。如果選擇的難度不是 `HARD`，則其值為 `None`。
 
-#### Game Command
+#### 遊戲指令
 
-A string command sent to the game process for controlling the platform.
+傳給遊戲端的字串，用來控制板子的指令。
 
 ```
 'MOVE_RIGHT'
 ```
 
-Here are available commands:
+以下是可用的指令：
 
-* `"SERVE_TO_LEFT"`: Serve the ball to the left.
-* `"SERVE_TO_RIGHT"`: Serve the ball to the right.
-* `"MOVE_LEFT"`: Move the platform to the left.
-* `"MOVE_RIGHT"`: Move the platform to the right.
-* `"NONE"`: Do nothing.
+* `"SERVE_TO_LEFT"`：將球發向左邊
+* `"SERVE_TO_RIGHT"`：將球發向右邊
+* `"MOVE_LEFT"`：將板子往左移
+* `"MOVE_RIGHT"`：將板子往右移
+* `"NONE"`：無動作
 
-### Log File
+### 紀錄檔
 
-The name of the ml client in the log flie is `"ml_1P"` for 1P player and `"ml_2P"` for 2P player.
+在紀錄檔中，機器學習端的名字 1P 為 `"ml_1P"`、2P 為 `"ml_2P"`。
 
-## Input Scripts for ML Mode
+## 機器學習模式的玩家程式
 
-The pingpong game is a 2P game, so it can accept two different ml scripts by specifying `-i <script_for_1P> -i <script_for_2P>`. If there is only one script specified, 1P and 2P will use the same script.
+乒乓球是雙人遊戲，所以在啟動機器學習模式時，可以利用 `-i <script_for_1P> -i <script_for_2P>` 指定兩個不同的玩家程式。如果只有指定一個玩家程式，則兩邊都會使用同一個程式。
 
-You can specify `ml_play_manual.py` as the input script. It will create an invisible joystick for you to play with the ml process. For example:
-1. Start the game by the command `python MLGame.py -i ml_play_template.py -i ml_play_manual.py pingpong <difficulty>`. There will be 2 windows, and one is the "Invisible joystick". The terminal will output a message "Invisible joystick is used. Press Enter to start the 2P ml process."
+而在遊戲中有提供 `ml_play_manual.py` 這個程式，它會建立一個手把，讓玩家可以在機器學習模式中手動與另一個程式對玩。使用流程：
+
+1. 使用 `python MLGame.py -i ml_play_template.py -i ml_play_manual.py pingpong <difficulty>` 啟動遊戲。會看到有兩個視窗，其中一個就是手把。終端機會輸出 "Invisible joystick is used. Press Enter to start the 2P ml process." 的訊息。
 
 <img src="https://i.imgur.com/iyrS87t.png" height="500px" />
 
-2. Drag the invisible joystick aside, and focus on it (The color of the window title is not gray).
+2. 將遊戲手把的視窗拉到一旁，並且讓它是目標視窗 (也就是說視窗的標題不是灰色的)。
 
 <img src="https://i.imgur.com/6kOPjgB.png" height="500px" />
 
-3. Press Enter key to start the game, and use left and right arrow keys to control the platform of the selected side.
+3. 按 Enter 鍵讓手把也發出準備指令以開始遊戲，使用左右方向鍵來控制板子移動。
 
-## About the Ball
+## 關於球的物理
 
-The behavior of the ball is the same as the game "Arkanoid".
+與打磚塊遊戲的機制相同
