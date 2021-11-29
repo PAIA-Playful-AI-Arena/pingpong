@@ -1,133 +1,240 @@
 # 乒乓球
 
-**遊戲版本：1.1**
+![pygame](https://img.shields.io/github/v/tag/PAIA-Playful-AI-Arena/pingpong)
 
-## 概觀
+[![Python 3.9](https://img.shields.io/badge/python-3.9-blue.svg)](https://www.python.org/downloads/release/python-390/)
+[![MLGame](https://img.shields.io/badge/MLGame-9.1.6--beta-<COLOR>.svg)](https://github.com/PAIA-Playful-AI-Arena/MLGame)
+[![pygame](https://img.shields.io/badge/pygame-2.0.1-<COLOR>.svg)](https://github.com/pygame/pygame/releases/tag/2.0.1)
+
+這是一個經典的乒乓球小遊戲
 
 <img src="https://i.imgur.com/ke6nUrB.gif" height="500px" />
 
-在回合開始時，可以決定發球位置與方向。如果沒有在 150 影格內發球，球會從平台目前位置隨機往左或往右發球。球速從 7 開始，每 100 影格增加 1。如果球速超過 40 卻還沒分出勝負的話，該回合為平手。
+---
+# 基礎介紹
 
-在不同的難度中加入兩種機制。一個是切球，球的 x 方向速度會因為板子接球時的移動而改變；另一個是在場地中央會有一個移動的障礙物。
+## 啟動方式
 
-## 執行
+- 直接啟動 [main.py](main.py) 即可執行
 
-* 手動模式：`python MLGame.py -m pingpong <difficulty> [game_over_score]`
-    * 將球發往左邊/右邊：1P - `.`、`/`，2P - `Q`、`E`
-    * 移動板子：1P - 左右方向鍵，2P - `A`、`D`
-* 機器學習模式：`python MLGame.py -i ml_play_template.py pingpong <difficulty> [game_over_score]`
+### 遊戲參數設定
 
-### 遊戲參數
-
-* `difficulty`：遊戲難度
-    * `EASY`：簡單的乒乓球遊戲
-    * `NORMAL`：加入切球機制
-    * `HARD`：加入切球機制與障礙物
-* `game_over_score`：[選填] 指定遊戲結束的分數。當任一方得到指定的分數時，就結束遊戲。預設是 3，但如果啟動遊戲時有指定 `-1` 選項，則結束分數會是 1。
-
-## 詳細遊戲資料
-
-### 座標系
-
-與打磚塊遊戲一樣
-
-### 遊戲區域
-
-500 \* 200 像素。1P 在下半部，2P 在上半部
-
-### 遊戲物件
-
-#### 球
-
-* 5 \* 5 像素大小的綠色正方形
-* 每場遊戲開始時，都是由 1P 先發球，之後每個回合輪流發球
-* 球由板子的位置發出，可以選擇往左或往右發球。如果沒有在 150 影格內發球，則會自動往隨機一個方向發球
-* 初始球速是每個影格 (&plusmn;7, &plusmn;7)，發球後每 100 影格增加 1
-
-#### 板子
-
-* 40 \* 30 的矩形，1P 是紅色的，2P 是藍色的
-* 板子移動速度是每個影格 (&plusmn;5, 0)
-* 1P 板子的初始位置在 (80, 420)，2P 則在 (80, 50)
-
-#### 切球機制
-
-在板子接球時，球的 x 方向速度會因為板子的移動而改變：
-
-* 如果板子與球往同一個方向移動時，球的 x 方向速度會增加 3 (只增加一次)
-* 如果板子沒有移動，則求的 x 方向速度會恢復為目前的基礎速度
-* 如果板子與球往相反方向移動時，球會被打回原來過來的方向，其 x 方向速度恢復為目前的基礎速度
-
-切球機制加入在 `NORMAL` 與 `HARD` 難度中。
-
-#### 障礙物
-
-* 30 \* 20 像素的矩形
-* x 初始位置在 0 到 180 之間，每 20 為一單位隨機決定，y 初始位置固定在 240，移動速度為每影格 (&plusmn;5, 0)
-* 障礙物會往復移動，初始移動方向是隨機決定的
-* 障礙物不會切球，球撞到障礙物會保持球的速度
-
-障礙物加入在 `HARD` 難度中。
-
-## 撰寫玩遊戲的程式
-
-程式範例在 [`ml/ml_play_template.py`](ml/ml_play_template.py)。
-
-### 初始化參數
-
-* `side`: 字串。其值只會是 `"1P"` 或 `"2P"`，代表這個程式被哪一邊使用。
-
-### 溝通物件
-
-#### 遊戲場景資訊
-
-由遊戲端發送的字典物件，同時也是存到紀錄檔的物件。
-
+```python
+# main.py 
+game = PingPong(difficulty="EASY", game_over_score=5)
 ```
+
+- `difficulty`：遊戲難度
+    - `EASY`：簡單的乒乓球遊戲
+    - `NORMAL`：加入切球機制
+    - `HARD`：加入切球機制與障礙物
+- `game_over_score [選填]`：指定遊戲結束的分數。當任一方得到指定的分數時，就結束遊戲。預設是 3，但如果啟動遊戲時有指定 -1 選項，則結束分數會是 1。
+
+## 玩法
+
+- 將球發往左邊/右邊
+  - 1P:  `.`、`/`
+  - 2P:  `Q`、`E`
+- 移動板子
+  - 1P: 左右方向鍵
+  - 2P: `A`、`D`
+
+1P 在下半部，2P 在上半部
+
+## 目標
+
+1. 讓對手沒接到球
+
+### 通關條件
+
+1. 自己的分數達到 `game_over_score`。
+
+### 失敗條件
+
+1. 對手的分數達到 `game_over_score`。
+
+### 平手條件
+
+1. 球速超過 40
+
+## 遊戲系統
+
+1. 遊戲物件
+   - 球
+     - 綠色正方形
+     - 每場遊戲開始時，都是由 1P 先發球，之後每個回合輪流發球
+     - 球由板子的位置發出，可以選擇往左或往右發球。如果沒有在 150 影格內發球，則會自動往隨機一個方向發球
+     - 初始球速是每個影格 (±7, ±7)，發球後每 100 影格增加 1
+
+   - 板子
+     - 矩形，1P 是紅色的，2P 是藍色的
+     - 板子移動速度是每個影格 (±5, 0)
+     - 1P 板子的初始位置在 (80, 420)，2P 則在 (80, 50)
+
+   - 障礙物
+     - 黃色矩形
+     - x 初始位置在 0 到 180 之間，每 20 為一單位隨機決定，y 初始位置固定在 240，移動速度為每影格 (±5, 0)
+     - 障礙物會往復移動，初始移動方向是隨機決定的
+     - 障礙物不會切球，球撞到障礙物會保持球的速度
+    
+     障礙物加入在 `HARD` 難度中。
+
+2. 行動機制
+    
+    左右移動板子，每次移動 5px
+    
+3. 座標系統
+    - 螢幕大小 200 x 500
+    - 板子 40 x 30
+    - 球 5 x 5
+    - 障礙物 30 x 20
+
+4. 切球機制
+ 
+    在板子接球時，球的 x 方向速度會因為板子的移動而改變：
+
+    - 如果板子與球往同一個方向移動時，球的 x 方向速度會增加 3 (只增加一次)
+    - 如果板子沒有移動，則球的 x 方向速度會恢復為目前的基礎速度
+    - 如果板子與球往相反方向移動時，球會被打回原來過來的方向，其 x 方向速度恢復為目前的基礎速度
+ 
+    切球機制加入在 `NORMAL` 與 `HARD` 難度中。
+---
+
+# 進階說明
+
+## 使用ＡＩ玩遊戲
+
+```bash
+# python MLGame.py <options> pingpong <difficulty> [game_over_score]
+python MLGame.py -i ml_play_template.py pingpong EASY 3
+```
+
+遊戲參數依序是 [`difficulty`] [`game_over_score`]
+
+## ＡＩ範例
+
+
+```python
+class MLPlay:
+    def __init__(self, side):
+        """
+        Constructor
+
+        @param side A string "1P" or "2P" indicates that the 
+        `MLPlay` is used by
+               which side.
+        """
+        self.ball_served = False
+        self.side = side
+
+    def update(self, scene_info):
+        """
+        Generate the command according to the received scene
+        information
+        """
+        # print(scene_info)
+        if scene_info["status"] != "GAME_ALIVE":
+            return "RESET"
+
+        if not self.ball_served:
+            self.ball_served = True
+            return "SERVE_TO_RIGHT"
+        else:
+            return "MOVE_RIGHT"
+
+    def reset(self):
+        """
+        Reset the status
+        """
+        print("reset "+self.side)
+        self.ball_served = False
+```
+
+#### 初始化參數
+- side: 字串。其值只會是 `"1P"` 或 `"2P"`，代表這個程式被哪一邊使用。
+
+## 遊戲資訊
+
+- scene_info 的資料格式如下
+
+```json
 {
-    'frame': 42,
-    'status': 'GAME_ALIVE',
-    'ball': (189, 128),
-    'ball_speed': (7, -7),
-    'platform_1P': (0, 420),
-    'platform_2P': (0, 50),
-    'blocker': (50, 240)
+    "frame": 42,
+    "status": "GAME_ALIVE",
+    "ball": [189, 128],
+    "ball_speed": [7, -7],
+    "platform_1P": [0, 420],
+    "platform_2P": [0, 50],
+    "blocker": [50, 240]
 }
 ```
 
-以下是該字典物件的鍵值對應：
+- `frame`：遊戲畫面更新的編號
+- `status`：字串。目前的遊戲狀態，會是以下的值其中之一：
+  - `GAME_ALIVE`：遊戲正在進行中
+  - `GAME_1P_WIN`：這回合 1P 獲勝
+  - `GAME_2P_WIN`：這回合 2P 獲勝
+  - `GAME_DRAW`：這回合平手
+- `ball` `(x, y)` tuple。球的位置。
+- `ball_speed`：`(x, y)` tuple。目前的球速。
+- `platform_1P`：`(x, y)` tuple。1P 板子的位置。
+- `platform_2P`：`(x, y)` tuple。2P 板子的位置。
+- `blocker`：`(x, y)` tuple。障礙物的位置。如果選擇的難度不是 `HARD`，則其值為 `None`。
 
-* `"frame"`：整數。紀錄的是第幾影格的場景資訊
-* `"status"`：字串。目前的遊戲狀態，會是以下的值其中之一：
-    * `"GAME_ALIVE"`：遊戲正在進行中
-    * `"GAME_1P_WIN"`：這回合 1P 獲勝
-    * `"GAME_2P_WIN"`：這回合 2P 獲勝
-    * `"GAME_DRAW"`：這回合平手
-* `"ball"`：`(x, y)` tuple。球的位置。
-* `"ball_speed"`：`(x, y)` tuple。目前的球速。
-* `"platform_1P"`：`(x, y)` tuple。1P 板子的位置。
-* `"platform_2P"`：`(x, y)` tuple。2P 板子的位置。
-* `"blocker"`：`(x, y)` tuple。障礙物的位置。如果選擇的難度不是 `HARD`，則其值為 `None`。
+## 動作指令
 
-#### 遊戲指令
+- 在 update() 最後要回傳一個字串，主角物件即會依照對應的字串行動，一次只能執行一個行動。
+    - `SERVE_TO_LEFT`：將球發向左邊
+    - `SERVE_TO_RIGHT`：將球發向右邊
+    - `MOVE_LEFT`：將板子往左移
+    - `MOVE_RIGHT`：將板子往右移
+    - `NONE`：無動作
 
-傳給遊戲端的字串，用來控制板子的指令。
+## 遊戲結果
 
+- 最後結果會顯示在 console 介面中，若是 PAIA 伺服器上執行，會回傳下列資訊到平台上。
+
+```json
+{
+  "frame_used": 54,
+  "state": "FINISH",
+  "attachment": [
+    {
+      "player": "ml_1P",
+      "rank": 1,
+      "score": 1,
+      "status": "GAME_PASS",
+      "ball_speed": [
+        7,
+        -7
+      ]
+    },
+    {
+      "player": "ml_2P",
+      "rank": 2,
+      "score": 0,
+      "status": "GAME_OVER",
+      "ball_speed": [
+        7,
+        -7
+      ]
+    }
+  ]
+}
 ```
-'MOVE_RIGHT'
-```
 
-以下是可用的指令：
-
-* `"SERVE_TO_LEFT"`：將球發向左邊
-* `"SERVE_TO_RIGHT"`：將球發向右邊
-* `"MOVE_LEFT"`：將板子往左移
-* `"MOVE_RIGHT"`：將板子往右移
-* `"NONE"`：無動作
-
-### 紀錄檔
-
-在紀錄檔中，機器學習端的名字 1P 為 `"ml_1P"`、2P 為 `"ml_2P"`。
+- `frame_used`：表示使用了多少個 frame
+- `state`：表示遊戲結束的狀態
+    - `FAIL`：遊戲結束
+    - `FINISH`：遊戲完成
+- `attachment`：紀錄遊戲各個玩家的結果與分數等資訊
+    - `player`：玩家編號
+    - `rank`：排名
+    - `score`：各玩家獲勝的次數
+    - `status`：玩家的狀態
+      - `GAME_PASS`：該玩家獲勝
+      - `GAME_OVER`：該玩家失敗
+    - `ball_speed`：球的速度
 
 ## 機器學習模式的玩家程式
 
@@ -147,4 +254,8 @@
 
 ## 關於球的物理
 
-與打磚塊遊戲的機制相同
+如果球撞進其他遊戲物件或是遊戲邊界，球會被直接「擠出」到碰撞面上，而不是補償碰撞距離給球。
+
+![Imgur](https://i.imgur.com/ouk3Jzh.png)
+
+---
