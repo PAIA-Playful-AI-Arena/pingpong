@@ -234,6 +234,7 @@ class MLPlay:
     - `status`：玩家的狀態
       - `GAME_PASS`：該玩家獲勝
       - `GAME_OVER`：該玩家失敗
+      - `GAME_DRAW`：雙方平手
     - `ball_speed`：球的速度
 
 ## 機器學習模式的玩家程式

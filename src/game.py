@@ -226,33 +226,32 @@ class PingPong(PaiaGame):
     def get_game_result(self) -> dict:
         attachment = []
         if self._score[0] > self._score[1]:
-            attachment = [{
-                "player": self.ai_clients()[0]["name"],
-                "rank": 1,
-                "score": self._score[0],
-                "status": "GAME_PASS",
-
-                "ball_speed": self._ball.speed,
-            },
+            attachment = [
+                {
+                    "player": self.ai_clients()[0]["name"],
+                    "rank": 1,
+                    "score": self._score[0],
+                    "status": "GAME_PASS",
+                    "ball_speed": self._ball.speed,
+                },
                 {
                     "player": self.ai_clients()[1]["name"],
                     "rank": 2,
                     "score": self._score[1],
                     "status": "GAME_OVER",
                     "ball_speed": self._ball.speed,
-
                 },
 
             ]
         elif self._score[0] < self._score[1]:
-            attachment = [{
-                "player": self.ai_clients()[0]["name"],
-                "rank": 2,
-                "score": self._score[0],
-                "status": "GAME_OVER",
-
-                "ball_speed": self._ball.speed,
-            },
+            attachment = [
+                {
+                    "player": self.ai_clients()[0]["name"],
+                    "rank": 2,
+                    "score": self._score[0],
+                    "status": "GAME_OVER",
+                    "ball_speed": self._ball.speed,
+                },
                 {
                     "player": self.ai_clients()[1]["name"],
                     "rank": 1,
@@ -261,26 +260,23 @@ class PingPong(PaiaGame):
                     "ball_speed": self._ball.speed,
 
                 },
-
             ]
-
         else:
-            # TODO if ball_speed is to high should be draw
-
-            attachment = [{
-                "player": self.ai_clients()[0]["name"],
-                "rank": 1,
-                "score": self._score[0],
-                "status": "GAME_DRAW",
-                # "ball_speed": self._ball.speed,
-            },
+            attachment = [
+                {
+                    "player": self.ai_clients()[0]["name"],
+                    "rank": 1,
+                    "score": self._score[0],
+                    "status": "GAME_DRAW",
+                    "ball_speed": self._ball.speed,
+                },
                 {
                     "player": self.ai_clients()[1]["name"],
                     "rank": 1,
                     "score": self._score[1],
-                    # "ball_speed": self._ball.speed,
+                    "status": "GAME_DRAW",
+                    "ball_speed": self._ball.speed,
                 },
-
             ]
         return {
             "frame_used": self._frame_count,
