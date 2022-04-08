@@ -13,7 +13,7 @@ class MLPlay:
         self.ball_served = False
         self.side = side
 
-    def update(self, scene_info):
+    def update(self, scene_info, *args, **kwargs):
         """
         Generate the command according to the received scene information
         """
