@@ -18,8 +18,11 @@ SERVE_BALL_ACTIONS = (PlatformAction.SERVE_TO_LEFT, PlatformAction.SERVE_TO_RIGH
 
 
 class Platform(pygame.sprite.Sprite):
+    COLOR_1P = "#D6465C"  # Red
+    COLOR_2P = "#5495FF"  # Blue
+
     def __init__(self, init_pos: tuple, play_area_rect: pygame.Rect,
-                 side, color, *groups):
+                 side, *groups):
         super().__init__(*groups)
 
         self._play_area_rect = play_area_rect
@@ -30,11 +33,11 @@ class Platform(pygame.sprite.Sprite):
         self.rect = pygame.Rect(*init_pos, 200, 30)
 
         if side == "1P":
-            self._color = "#D6465C"
+            self._color = Platform.COLOR_1P
         elif side == "2P":
-            self._color = "#5495FF"
+            self._color = Platform.COLOR_2P
         else:
-            self._color = "#D6465C"
+            self._color = Platform.COLOR_1P
 
     @property
     def pos(self):

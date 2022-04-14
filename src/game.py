@@ -9,9 +9,6 @@ from .game_object import (
     Ball, Blocker, Platform, PlatformAction, SERVE_BALL_ACTIONS
 )
 
-color_1P = (219, 70, 92)  # Red
-color_2P = (84, 149, 255)  # Blue
-
 
 class PingPong(PaiaGame):
 
@@ -33,9 +30,9 @@ class PingPong(PaiaGame):
         enable_slice_ball = False if self._difficulty == "EASY" else True
         self._ball = Ball(pygame.Rect(0, 0, 200, 500), enable_slice_ball, self._draw_group)
         self._platform_1P = Platform((80, pygame.Rect(0, 0, 200, 500).height - 80),
-                                     pygame.Rect(0, 0, 200, 500), "1P", color_1P, self._draw_group)
+                                     pygame.Rect(0, 0, 200, 500), "1P", self._draw_group)
         self._platform_2P = Platform((80, 50),
-                                     pygame.Rect(0, 0, 200, 500), "2P", color_2P, self._draw_group)
+                                     pygame.Rect(0, 0, 200, 500), "2P", self._draw_group)
 
         if self._difficulty != "HARD":
             # Put the blocker at the end of the world
