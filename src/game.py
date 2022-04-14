@@ -4,13 +4,12 @@ import pygame
 
 from mlgame.gamedev.game_interface import PaiaGame, GameStatus, GameResultState
 from mlgame.view.test_decorator import check_game_progress, check_game_result
-from mlgame.view.view_model import create_text_view_data, Scene
+from mlgame.view.view_model import create_text_view_data, Scene, create_scene_progress_data
 from .game_object import (
     Ball, Blocker, Platform, PlatformAction, SERVE_BALL_ACTIONS
 )
 
-color_1P = (219, 70, 92)  # Red
-color_2P = (84, 149, 255)  # Blue
+DRAW_BALL_SPEED = 40
 
 
 class PingPong(PaiaGame):
@@ -33,9 +32,9 @@ class PingPong(PaiaGame):
         enable_slice_ball = False if self._difficulty == "EASY" else True
         self._ball = Ball(pygame.Rect(0, 0, 200, 500), enable_slice_ball, self._draw_group)
         self._platform_1P = Platform((80, pygame.Rect(0, 0, 200, 500).height - 80),
-                                     pygame.Rect(0, 0, 200, 500), "1P", color_1P, self._draw_group)
+                                     pygame.Rect(0, 0, 200, 500), "1P", self._draw_group)
         self._platform_2P = Platform((80, 50),
-                                     pygame.Rect(0, 0, 200, 500), "2P", color_2P, self._draw_group)
+                                     pygame.Rect(0, 0, 200, 500), "2P", self._draw_group)
 
         if self._difficulty != "HARD":
             # Put the blocker at the end of the world
@@ -122,6 +121,7 @@ class PingPong(PaiaGame):
     def _ball_moving(self):
         # Speed up the ball every 200 frames
         if (self._frame_count - self._ball_served_frame) % 100 == 0:
+            # speed up per 100 frames
             self._ball.speed_up()
 
         self._ball.move()
@@ -153,7 +153,7 @@ class PingPong(PaiaGame):
             self._game_status = GameStatus.GAME_2P_WIN
         elif self._ball.rect.bottom < self._platform_2P.rect.top:
             self._game_status = GameStatus.GAME_1P_WIN
-        elif abs(min(self._ball.speed, key=abs)) > 40:
+        elif abs(min(self._ball.speed, key=abs)) > DRAW_BALL_SPEED:
             self._game_status = GameStatus.GAME_DRAW
         else:
             self._game_status = GameStatus.GAME_ALIVE
@@ -187,39 +187,30 @@ class PingPong(PaiaGame):
 
     @check_game_progress
     def get_scene_progress_data(self) -> dict:
-        game_obj_list = []
-        for obj in self._draw_group:
-            game_obj_list.append(obj.get_object_data)
+        game_obj_list = [obj.get_object_data for obj in self._draw_group]
 
         create_1p_score = create_text_view_data("1P: " + str(self._score[0]),
                                                 1,
                                                 self.scene.height - 21,
-                                                "#D6465C",
-                                                "18px Arial"
+                                                Platform.COLOR_1P,
+                                                "18px Arial BOLD"
                                                 )
         create_2p_score = create_text_view_data("2P: " + str(self._score[1]),
                                                 1,
                                                 4,
-                                                "#5495FF",
-                                                "18px Arial"
+                                                Platform.COLOR_2P,
+                                                "18px Arial BOLD"
                                                 )
         create_speed_text = create_text_view_data("Speed: " + str(self._ball.speed),
                                                   self.scene.width - 120,
                                                   self.scene.height - 21,
                                                   "#FFFFFF",
-                                                  "18px Arial"
+                                                  "18px Arial BOLD"
                                                   )
         foreground = [create_1p_score, create_2p_score, create_speed_text]
 
-        scene_progress = {
-            "background": [],
-            "object_list": game_obj_list,
-            "toggle": [],
-            "foreground": foreground,
-            "user_info": [],
-            "game_sys_info": {}
-        }
-
+        scene_progress = create_scene_progress_data(frame=self._frame_count, object_list=game_obj_list,
+                                                    foreground=foreground)
         return scene_progress
 
     @check_game_result
@@ -292,26 +283,26 @@ class PingPong(PaiaGame):
         key_pressed_list = pygame.key.get_pressed()
 
         if key_pressed_list[pygame.K_PERIOD]:
-            cmd_1P = "SERVE_TO_LEFT"
+            cmd_1P = PlatformAction.SERVE_TO_LEFT
         elif key_pressed_list[pygame.K_SLASH]:
-            cmd_1P = "SERVE_TO_RIGHT"
+            cmd_1P = PlatformAction.SERVE_TO_RIGHT
         elif key_pressed_list[pygame.K_LEFT]:
-            cmd_1P = "MOVE_LEFT"
+            cmd_1P = PlatformAction.MOVE_LEFT
         elif key_pressed_list[pygame.K_RIGHT]:
-            cmd_1P = "MOVE_RIGHT"
+            cmd_1P = PlatformAction.MOVE_RIGHT
         else:
-            cmd_1P = "NONE"
+            cmd_1P = PlatformAction.NONE
 
         if key_pressed_list[pygame.K_q]:
-            cmd_2P = "SERVE_TO_LEFT"
+            cmd_2P = PlatformAction.SERVE_TO_LEFT
         elif key_pressed_list[pygame.K_e]:
-            cmd_2P = "SERVE_TO_RIGHT"
+            cmd_2P = PlatformAction.SERVE_TO_RIGHT
         elif key_pressed_list[pygame.K_a]:
-            cmd_2P = "MOVE_LEFT"
+            cmd_2P = PlatformAction.MOVE_LEFT
         elif key_pressed_list[pygame.K_d]:
-            cmd_2P = "MOVE_RIGHT"
+            cmd_2P = PlatformAction.MOVE_RIGHT
         else:
-            cmd_2P = "NONE"
+            cmd_2P = PlatformAction.NONE
 
         ai_1p = self.ai_clients()[0]["name"]
         ai_2p = self.ai_clients()[1]["name"]
@@ -324,6 +315,7 @@ class PingPong(PaiaGame):
         let MLGame know how to parse your ai,
         you can also use this names to get different cmd and send different data to each ai client
         """
+        # TODO refactor name of ai client
         return [
             {"name": "ml_1P", "args": ("1P",)},
             {"name": "ml_2P", "args": ("2P",)}
