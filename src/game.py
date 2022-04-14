@@ -9,6 +9,8 @@ from .game_object import (
     Ball, Blocker, Platform, PlatformAction, SERVE_BALL_ACTIONS
 )
 
+DRAW_BALL_SPEED = 40
+
 
 class PingPong(PaiaGame):
 
@@ -151,7 +153,7 @@ class PingPong(PaiaGame):
             self._game_status = GameStatus.GAME_2P_WIN
         elif self._ball.rect.bottom < self._platform_2P.rect.top:
             self._game_status = GameStatus.GAME_1P_WIN
-        elif abs(min(self._ball.speed, key=abs)) > 40:
+        elif abs(min(self._ball.speed, key=abs)) > DRAW_BALL_SPEED:
             self._game_status = GameStatus.GAME_DRAW
         else:
             self._game_status = GameStatus.GAME_ALIVE
@@ -190,20 +192,20 @@ class PingPong(PaiaGame):
         create_1p_score = create_text_view_data("1P: " + str(self._score[0]),
                                                 1,
                                                 self.scene.height - 21,
-                                                "#D6465C",
-                                                "18px Arial"
+                                                Platform.COLOR_1P,
+                                                "18px Arial BOLD"
                                                 )
         create_2p_score = create_text_view_data("2P: " + str(self._score[1]),
                                                 1,
                                                 4,
-                                                "#5495FF",
-                                                "18px Arial"
+                                                Platform.COLOR_2P,
+                                                "18px Arial BOLD"
                                                 )
         create_speed_text = create_text_view_data("Speed: " + str(self._ball.speed),
                                                   self.scene.width - 120,
                                                   self.scene.height - 21,
                                                   "#FFFFFF",
-                                                  "18px Arial"
+                                                  "18px Arial BOLD"
                                                   )
         foreground = [create_1p_score, create_2p_score, create_speed_text]
 
@@ -288,26 +290,26 @@ class PingPong(PaiaGame):
         key_pressed_list = pygame.key.get_pressed()
 
         if key_pressed_list[pygame.K_PERIOD]:
-            cmd_1P = "SERVE_TO_LEFT"
+            cmd_1P = PlatformAction.SERVE_TO_LEFT
         elif key_pressed_list[pygame.K_SLASH]:
-            cmd_1P = "SERVE_TO_RIGHT"
+            cmd_1P = PlatformAction.SERVE_TO_RIGHT
         elif key_pressed_list[pygame.K_LEFT]:
-            cmd_1P = "MOVE_LEFT"
+            cmd_1P = PlatformAction.MOVE_LEFT
         elif key_pressed_list[pygame.K_RIGHT]:
-            cmd_1P = "MOVE_RIGHT"
+            cmd_1P = PlatformAction.MOVE_RIGHT
         else:
-            cmd_1P = "NONE"
+            cmd_1P = PlatformAction.NONE
 
         if key_pressed_list[pygame.K_q]:
-            cmd_2P = "SERVE_TO_LEFT"
+            cmd_2P = PlatformAction.SERVE_TO_LEFT
         elif key_pressed_list[pygame.K_e]:
-            cmd_2P = "SERVE_TO_RIGHT"
+            cmd_2P = PlatformAction.SERVE_TO_RIGHT
         elif key_pressed_list[pygame.K_a]:
-            cmd_2P = "MOVE_LEFT"
+            cmd_2P = PlatformAction.MOVE_LEFT
         elif key_pressed_list[pygame.K_d]:
-            cmd_2P = "MOVE_RIGHT"
+            cmd_2P = PlatformAction.MOVE_RIGHT
         else:
-            cmd_2P = "NONE"
+            cmd_2P = PlatformAction.NONE
 
         ai_1p = self.ai_clients()[0]["name"]
         ai_2p = self.ai_clients()[1]["name"]
@@ -320,6 +322,7 @@ class PingPong(PaiaGame):
         let MLGame know how to parse your ai,
         you can also use this names to get different cmd and send different data to each ai client
         """
+        # TODO refactor name of ai client
         return [
             {"name": "ml_1P", "args": ("1P",)},
             {"name": "ml_2P", "args": ("2P",)}

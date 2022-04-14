@@ -5,6 +5,9 @@ from pygame.math import Vector2
 import pygame
 import random
 
+PLATFORM_W = 200
+PLATFORM_H = 10
+
 
 class PlatformAction(StringEnum):
     SERVE_TO_LEFT = auto()
@@ -30,12 +33,13 @@ class Platform(pygame.sprite.Sprite):
         self._speed = [0, 0]
         self._init_pos = init_pos
 
-        self.rect = pygame.Rect(*init_pos, 200, 30)
+        self.rect = pygame.Rect(*init_pos, PLATFORM_W, PLATFORM_H)
 
         if side == "1P":
             self._color = Platform.COLOR_1P
         elif side == "2P":
             self._color = Platform.COLOR_2P
+            # self.rect.move_ip(0, -PLATFORM_H)
         else:
             self._color = Platform.COLOR_1P
 
