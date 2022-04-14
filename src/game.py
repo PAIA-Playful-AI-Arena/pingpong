@@ -4,7 +4,7 @@ import pygame
 
 from mlgame.gamedev.game_interface import PaiaGame, GameStatus, GameResultState
 from mlgame.view.test_decorator import check_game_progress, check_game_result
-from mlgame.view.view_model import create_text_view_data, Scene
+from mlgame.view.view_model import create_text_view_data, Scene, create_scene_progress_data
 from .game_object import (
     Ball, Blocker, Platform, PlatformAction, SERVE_BALL_ACTIONS
 )
@@ -209,15 +209,8 @@ class PingPong(PaiaGame):
                                                   )
         foreground = [create_1p_score, create_2p_score, create_speed_text]
 
-        scene_progress = {
-            "background": [],
-            "object_list": game_obj_list,
-            "toggle": [],
-            "foreground": foreground,
-            "user_info": [],
-            "game_sys_info": {}
-        }
-
+        scene_progress = create_scene_progress_data(frame=self._frame_count, object_list=game_obj_list,
+                                                    foreground=foreground)
         return scene_progress
 
     @check_game_result
