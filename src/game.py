@@ -187,9 +187,7 @@ class PingPong(PaiaGame):
 
     @check_game_progress
     def get_scene_progress_data(self) -> dict:
-        game_obj_list = []
-        for obj in self._draw_group:
-            game_obj_list.append(obj.get_object_data)
+        game_obj_list = [obj.get_object_data for obj in self._draw_group]
 
         create_1p_score = create_text_view_data("1P: " + str(self._score[0]),
                                                 1,
