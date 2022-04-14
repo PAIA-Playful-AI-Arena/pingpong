@@ -122,6 +122,7 @@ class PingPong(PaiaGame):
     def _ball_moving(self):
         # Speed up the ball every 200 frames
         if (self._frame_count - self._ball_served_frame) % 100 == 0:
+            # speed up per 100 frames
             self._ball.speed_up()
 
         self._ball.move()
