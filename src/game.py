@@ -31,9 +31,9 @@ class PingPong(PaiaGame):
 
         enable_slice_ball = False if self._difficulty == "EASY" else True
         self._ball = Ball(pygame.Rect(0, 0, 200, 500), enable_slice_ball, self._draw_group)
-        self._platform_1P = Platform((80, pygame.Rect(0, 0, 200, 500).height - 80),
+        self._platform_1P = Platform((80, 420),
                                      pygame.Rect(0, 0, 200, 500), "1P", self._draw_group)
-        self._platform_2P = Platform((80, 50),
+        self._platform_2P = Platform((80, 70),
                                      pygame.Rect(0, 0, 200, 500), "2P", self._draw_group)
 
         if self._difficulty != "HARD":

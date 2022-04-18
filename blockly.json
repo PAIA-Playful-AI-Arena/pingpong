@@ -33,7 +33,7 @@
         [0, "top boundary", "上邊界"],
         [500, "bottom boundary", "下邊界"],
         [40, "platform width", "平台寬度"],
-        [30, "platform height", "平台高度"],
+        [10, "platform height", "平台高度"],
         [30, "blocker width", "障礙物寬度"],
         [20, "blocker height", "障礙物高度"]
     ],

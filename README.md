@@ -3,7 +3,7 @@
 ![pygame](https://img.shields.io/github/v/tag/PAIA-Playful-AI-Arena/pingpong)
 
 [![Python 3.9](https://img.shields.io/badge/python-3.9-blue.svg)](https://www.python.org/downloads/release/python-390/)
-[![MLGame](https://img.shields.io/badge/MLGame-9.2.3-<COLOR>.svg)](https://github.com/PAIA-Playful-AI-Arena/MLGame)
+[![MLGame](https://img.shields.io/badge/MLGame-9.3.4-<COLOR>.svg)](https://github.com/PAIA-Playful-AI-Arena/MLGame)
 [![pygame](https://img.shields.io/badge/pygame-2.0.1-<COLOR>.svg)](https://github.com/pygame/pygame/releases/tag/2.0.1)
 
 這是一個經典的乒乓球小遊戲
@@ -55,7 +55,7 @@ game = PingPong(difficulty="EASY", game_over_score=5)
 
 ### 平手條件
 
-1. 球速超過 40
+1. 球速超過 `40`
 
 ## 遊戲系統
 
@@ -69,7 +69,7 @@ game = PingPong(difficulty="EASY", game_over_score=5)
    - 板子
      - 矩形，1P 是紅色的，2P 是藍色的
      - 板子移動速度是每個影格 (±5, 0)
-     - 1P 板子的初始位置在 (80, 420)，2P 則在 (80, 50)
+     - 1P 板子的初始位置在 (80, 420)，2P 則在 (80, 70)
 
    - 障礙物
      - 黃色矩形
@@ -88,7 +88,7 @@ game = PingPong(difficulty="EASY", game_over_score=5)
     - 板子 40 x 30
     - 球 5 x 5
     - 障礙物 30 x 20
-
+    ![](./asset/github/打乒乓01.png)
 4. 切球機制
  
     在板子接球時，球的 x 方向速度會因為板子的移動而改變：

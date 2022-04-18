@@ -5,7 +5,7 @@ from pygame.math import Vector2
 import pygame
 import random
 
-PLATFORM_W = 200
+PLATFORM_W = 40
 PLATFORM_H = 10
 
 
