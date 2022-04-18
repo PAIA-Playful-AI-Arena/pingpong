@@ -83,7 +83,7 @@ game = PingPong(difficulty="EASY", game_over_score=5)
     
     左右移動板子，每次移動 5px
     
-3. 座標系統
+3. 座標系統 (物件座標皆為左上角座標)
     - 螢幕大小 200 x 500
     - 板子 40 x 30
     - 球 5 x 5
