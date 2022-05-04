@@ -8,7 +8,7 @@
 
 這是一個經典的乒乓球小遊戲
 
-![](./asset/github/打乒乓02.gif)
+![](./asset/github/打乒乓.gif)
 
 ---
 
@@ -89,7 +89,7 @@ game = PingPong(difficulty="EASY", game_over_score=5)
     - 板子 40 x 30
     - 球 5 x 5
     - 障礙物 30 x 20
-      ![](./asset/github/打乒乓01.png)
+      ![](./asset/github/打乒乓-座標圖.png)
 4. 切球機制
 
    在板子接球時，球的 x 方向速度會因為板子的移動而改變：
@@ -168,28 +168,13 @@ class MLPlay:
 {
   "frame": 24,
   "status": "GAME_ALIVE",
-  "ball": [
-    63,
-    241
-  ],
-  "ball_speed": [
-    7,
-    7
-  ],
+  "ball": [ 63, 241],
+  "ball_speed": [7, 7],
   "ball_served": true,
   "serving_side": "2P",
-  "platform_1P": [
-    0,
-    420
-  ],
-  "platform_2P": [
-    0,
-    70
-  ],
-  "blocker": [
-    140,
-    240
-  ]
+  "platform_1P": [0, 420],
+  "platform_2P": [0, 70],
+  "blocker": [140, 240]
 }
 
 ```
@@ -266,8 +251,6 @@ class MLPlay:
 
 ## 關於球的物理
 
-如果球撞進其他遊戲物件或是遊戲邊界，球會被直接「擠出」到碰撞面上，而不是補償碰撞距離給球。
-
-[//]: # (![Imgur]&#40;https://i.imgur.com/ouk3Jzh.png&#41;)
-![球的物理](asset/github/打乒乓03.png)
+球在移動中，下一幀會穿牆的時候，會移動至球的路徑與碰撞表面的交點。
+![球的物理](./asset/github/打乒乓-球的物理.png)
 ---
