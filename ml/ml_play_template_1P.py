@@ -1,6 +1,8 @@
 """
 The template of the script for the machine learning process in game pingpong
 """
+import json
+
 
 class MLPlay:
     def __init__(self, side):
@@ -17,7 +19,7 @@ class MLPlay:
         """
         Generate the command according to the received scene information
         """
-        # print(scene_info)
+        print(json.dumps(scene_info))
         if scene_info["status"] != "GAME_ALIVE":
             return "RESET"
 
@@ -25,7 +27,7 @@ class MLPlay:
             self.ball_served = True
             return "SERVE_TO_RIGHT"
         else:
-            return "MOVE_RIGHT"
+            return "MOVE_LEFT"
 
     def reset(self):
         """

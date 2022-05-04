@@ -134,6 +134,8 @@ class PingPong(PaiaGame):
             "status": self.get_game_status(),
             "ball": self._ball.pos,
             "ball_speed": self._ball.speed,
+            "ball_served":self._ball_served,
+            "serving_side":"1P" if self._ball.serve_from_1P else "2P",
             "platform_1P": self._platform_1P.pos,
             "platform_2P": self._platform_2P.pos
         }
