@@ -1,12 +1,12 @@
 # 乒乓球
+<img src="./asset/logo.svg" alt="logo" width="100"/> 
 
 ![pygame](https://img.shields.io/github/v/tag/PAIA-Playful-AI-Arena/pingpong)
-
 [![Python 3.9](https://img.shields.io/badge/python-3.9-blue.svg)](https://www.python.org/downloads/release/python-390/)
 [![MLGame](https://img.shields.io/badge/MLGame-9.3.4-<COLOR>.svg)](https://github.com/PAIA-Playful-AI-Arena/MLGame)
 [![pygame](https://img.shields.io/badge/pygame-2.0.1-<COLOR>.svg)](https://github.com/pygame/pygame/releases/tag/2.0.1)
 
-這是一個經典的乒乓球小遊戲
+想要體驗一場有趣且刺激的乒乓球遊戲嗎？操控發球及反擊的時機讓對手無路可逃，喜歡快節奏的你一定要來體驗看看！
 
 ![](./asset/github/打乒乓.gif)
 
