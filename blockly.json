@@ -19,6 +19,8 @@
         ["scene_info['ball'][1]", "y coordinate of ball", "球的 y 座標"],
         ["scene_info['ball_speed'][0]", "ball velocity along x-axis", "球的 x 方向速度"],
         ["scene_info['ball_speed'][1]", "ball velocity along y-axis", "球的 y 方向速度"],
+        ["scene_info['ball_served']", "the state of ball is served", "發球狀態"],
+        ["scene_info['serving_side']", "serving side", "發球方"],
         ["scene_info['platform_1P'][0]", "x coordinate of 1P platform", "1P 平台的 x 座標"],
         ["scene_info['platform_1P'][1]", "y coordinate of 1P platform", "1P 平台的 y 座標"],
         ["scene_info['platform_2P'][0]", "x coordinate of 2P platform", "2P 平台的 x 座標"],
