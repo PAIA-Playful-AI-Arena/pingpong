@@ -40,7 +40,7 @@
         [20, "blocker height", "障礙物高度"],
         [420, "blocker height", "1P 平台的 y 座標"],
         [70, "blocker height", "2P 平台的 y 座標"],
-        [240, "blocker height", "障礙物的 y 座標"],
+        [240, "blocker height", "障礙物的 y 座標"]
     ],
     "ACTION": [
         ["SERVE_TO_LEFT", "serving left", "向左發球"],
