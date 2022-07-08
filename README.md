@@ -8,7 +8,7 @@
 
 想要體驗一場有趣且刺激的乒乓球遊戲嗎？操控發球及反擊的時機讓對手無路可逃，喜歡快節奏的你一定要來體驗看看！
 
-![](https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/pingpong/main/asset/github/%E6%89%93%E4%B9%92%E4%B9%93.gif)
+<img src="https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/pingpong/main/asset/github/%E6%89%93%E4%B9%92%E4%B9%93.gif" height="500"/>
 
 ---
 
@@ -89,7 +89,8 @@ game = PingPong(difficulty="EASY", game_over_score=5)
     - 板子 40 x 30
     - 球 5 x 5
     - 障礙物 30 x 20
-      ![](https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/pingpong/main/asset/github/%E6%89%93%E4%B9%92%E4%B9%93-%E5%BA%A7%E6%A8%99%E5%9C%96.png)
+      <img src="https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/pingpong/main/asset/github/%E6%89%93%E4%B9%92%E4%B9%93-%E5%BA%A7%E6%A8%99%E5%9C%96.png" height="500"/>
+
 4. 切球機制
 
    在板子接球時，球的 x 方向速度會因為板子的移動而改變：
@@ -252,5 +253,6 @@ class MLPlay:
 ## 關於球的物理
 
 球在移動中，下一幀會穿牆的時候，會移動至球的路徑與碰撞表面的交點。
-![球的物理](https://github.com/PAIA-Playful-AI-Arena/pingpong/blob/main/asset/github/%E6%89%93%E4%B9%92%E4%B9%93-%E7%90%83%E7%9A%84%E7%89%A9%E7%90%86.png?raw=true)
+<img src="https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/pingpong/main/asset/github/%E6%89%93%E4%B9%92%E4%B9%93-%E7%90%83%E7%9A%84%E7%89%A9%E7%90%86.png" height="500"/>
+
 ---
