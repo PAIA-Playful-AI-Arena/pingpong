@@ -1,12 +1,15 @@
 {
   "game_name": "pingpong",
-  "version": "2.2.3",
+  "version": "2.3.1",
   "url": "https://github.com/PAIA-Playful-AI-Arena/pingpong",
   "description": "想要體驗一場有趣且刺激的乒乓球遊戲嗎？操控發球及反擊的時機讓對手無路可逃，喜歡快節奏的你一定要來體驗看看！",
   "logo": [
     "./asset/logo.svg",
     "https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/Paia-Desktop/master/media/pingpong.svg"
   ],
+  "user_num": {
+    "min": 2,"max": 2
+  },
   "game_params": [
     {
       "name": "difficulty",

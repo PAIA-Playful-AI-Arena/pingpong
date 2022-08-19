@@ -1,9 +1,10 @@
 # 乒乓球
+
 <img src="https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/pingpong/main/asset/logo.svg" alt="logo" width="100"/> 
 
 ![pygame](https://img.shields.io/github/v/tag/PAIA-Playful-AI-Arena/pingpong)
 [![Python 3.9](https://img.shields.io/badge/python-3.9-blue.svg)](https://www.python.org/downloads/release/python-390/)
-[![MLGame](https://img.shields.io/badge/MLGame-9.3.4-<COLOR>.svg)](https://github.com/PAIA-Playful-AI-Arena/MLGame)
+[![MLGame](https://img.shields.io/badge/MLGame->9.5.3-<COLOR>.svg)](https://github.com/PAIA-Playful-AI-Arena/MLGame)
 [![pygame](https://img.shields.io/badge/pygame-2.0.1-<COLOR>.svg)](https://github.com/pygame/pygame/releases/tag/2.0.1)
 
 想要體驗一場有趣且刺激的乒乓球遊戲嗎？操控發球及反擊的時機讓對手無路可逃，喜歡快節奏的你一定要來體驗看看！
@@ -29,7 +30,8 @@ game = PingPong(difficulty="EASY", game_over_score=5)
     - `EASY`：簡單的乒乓球遊戲
     - `NORMAL`：加入切球機制
     - `HARD`：加入切球機制與障礙物
-- `game_over_score [選填]`：指定遊戲結束的分數。當任一方得到指定的分數時，就結束遊戲。預設是 3，但如果啟動遊戲時有指定 -1 選項，則結束分數會是 1。
+- `game_over_score`：指定遊戲結束的分數。當任一方得到指定的分數時，就結束遊戲。預設是 3，但如果啟動遊戲時有指定 -1
+  選項，則結束分數會是 1。
 
 ## 玩法
 
@@ -108,38 +110,30 @@ game = PingPong(difficulty="EASY", game_over_score=5)
 ## 使用ＡＩ玩遊戲
 
 ```bash
-# python MLGame.py <options> pingpong <difficulty> [game_over_score]
-# before MLGame 9.1.*
-python MLGame.py -i ml_play_template.py pingpong EASY 3
-
-# Begin from MLGame 9.2.*
-python MLGame.py -i ml_play_template_1P.py -i ml_play_template_2P.py -f 120 \
-pingpong --difficulty HARD --game_over_score 5
+# 在 pingpong 資料夾中打開終端機 
+python -m mlgame -i ./ml/ml_play_template_1P.py -i ./ml/ml_play_template_2P.py  ./ --difficulty HARD --game_over_score 3 
 ```
-
-遊戲參數依序是 [`difficulty`] [`game_over_score`]
 
 ## ＡＩ範例
 
 ```python
+
 class MLPlay:
-    def __init__(self, side):
+    def __init__(self, ai_name, *args, **kwargs):
         """
         Constructor
 
-        @param side A string "1P" or "2P" indicates that the 
-        `MLPlay` is used by
+        @param ai_name A string "1P" or "2P" indicates that the `MLPlay` is used by
                which side.
         """
         self.ball_served = False
-        self.side = side
+        self.side = ai_name
+        print(kwargs)
 
-    def update(self, scene_info):
+    def update(self, scene_info, *args, **kwargs):
         """
-        Generate the command according to the received scene
-        information
+        Generate the command according to the received scene information
         """
-        # print(scene_info)
         if scene_info["status"] != "GAME_ALIVE":
             return "RESET"
 
@@ -147,7 +141,7 @@ class MLPlay:
             self.ball_served = True
             return "SERVE_TO_RIGHT"
         else:
-            return "MOVE_RIGHT"
+            return "MOVE_LEFT"
 
     def reset(self):
         """
@@ -155,11 +149,23 @@ class MLPlay:
         """
         print("reset " + self.side)
         self.ball_served = False
+
 ```
 
 #### 初始化參數
 
-- side: 字串。其值只會是 `"1P"` 或 `"2P"`，代表這個程式被哪一邊使用。
+- ai_name: 字串。其值只會是 `"1P"` 或 `"2P"`，代表這個程式被哪一邊使用。
+- kwargs: 字典。裡面會包含遊戲初始化的參數
+  ```json
+
+    {"game_params": 
+      {
+        "difficulty": "HARD",
+        "game_over_score": 3
+      }
+    }
+
+    ```
 
 ## 遊戲資訊
 
@@ -169,13 +175,28 @@ class MLPlay:
 {
   "frame": 24,
   "status": "GAME_ALIVE",
-  "ball": [ 63, 241],
-  "ball_speed": [7, 7],
+  "ball": [
+    63,
+    241
+  ],
+  "ball_speed": [
+    7,
+    7
+  ],
   "ball_served": true,
   "serving_side": "2P",
-  "platform_1P": [0, 420],
-  "platform_2P": [0, 70],
-  "blocker": [140, 240]
+  "platform_1P": [
+    0,
+    420
+  ],
+  "platform_2P": [
+    0,
+    70
+  ],
+  "blocker": [
+    140,
+    240
+  ]
 }
 
 ```
