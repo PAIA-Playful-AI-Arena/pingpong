@@ -13,6 +13,7 @@ class MLPlay:
         """
         self.ball_served = False
         self.side = ai_name
+        print(kwargs)
 
     def update(self, scene_info, *args, **kwargs):
         """
