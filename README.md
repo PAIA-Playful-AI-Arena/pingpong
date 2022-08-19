@@ -3,7 +3,7 @@
 
 ![pygame](https://img.shields.io/github/v/tag/PAIA-Playful-AI-Arena/pingpong)
 [![Python 3.9](https://img.shields.io/badge/python-3.9-blue.svg)](https://www.python.org/downloads/release/python-390/)
-[![MLGame](https://img.shields.io/badge/MLGame-9.3.4-<COLOR>.svg)](https://github.com/PAIA-Playful-AI-Arena/MLGame)
+[![MLGame](https://img.shields.io/badge/MLGame->9.5.3-<COLOR>.svg)](https://github.com/PAIA-Playful-AI-Arena/MLGame)
 [![pygame](https://img.shields.io/badge/pygame-2.0.1-<COLOR>.svg)](https://github.com/pygame/pygame/releases/tag/2.0.1)
 
 想要體驗一場有趣且刺激的乒乓球遊戲嗎？操控發球及反擊的時機讓對手無路可逃，喜歡快節奏的你一定要來體驗看看！
@@ -108,16 +108,9 @@ game = PingPong(difficulty="EASY", game_over_score=5)
 ## 使用ＡＩ玩遊戲
 
 ```bash
-# python MLGame.py <options> pingpong <difficulty> [game_over_score]
-# before MLGame 9.1.*
-python MLGame.py -i ml_play_template.py pingpong EASY 3
-
-# Begin from MLGame 9.2.*
-python MLGame.py -i ml_play_template_1P.py -i ml_play_template_2P.py -f 120 \
-pingpong --difficulty HARD --game_over_score 5
+# 在 pingpong 資料夾中打開終端機 
+python -m mlgame -i ./games/pingpong/ml/ml_play_manual.py  ./games/pingpong --difficulty HARD --game_over_score 3
 ```
-
-遊戲參數依序是 [`difficulty`] [`game_over_score`]
 
 ## ＡＩ範例
 
