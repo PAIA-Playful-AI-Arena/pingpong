@@ -3,15 +3,15 @@ The template of the script for the machine learning process in game pingpong
 """
 
 class MLPlay:
-    def __init__(self, side):
+    def __init__(self,  ai_name,*args,**kwargs):
         """
         Constructor
 
-        @param side A string "1P" or "2P" indicates that the `MLPlay` is used by
+        @param ai_name A string "1P" or "2P" indicates that the `MLPlay` is used by
                which side.
         """
         self.ball_served = False
-        self.side = side
+        self.side = ai_name
 
     def update(self, scene_info, *args, **kwargs):
         """

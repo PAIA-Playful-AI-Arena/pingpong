@@ -1,4 +1,4 @@
-from mlgame.gamedev import physics
+from mlgame.game import physics
 from mlgame.utils.enum import StringEnum, auto
 
 from pygame.math import Vector2

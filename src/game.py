@@ -2,8 +2,9 @@ import random
 
 import pygame
 
-from mlgame.gamedev.game_interface import PaiaGame, GameStatus, GameResultState
-from mlgame.view.test_decorator import check_game_progress, check_game_result
+from mlgame.game.paia_game import PaiaGame, GameStatus, GameResultState
+from mlgame.utils.enum import get_ai_name
+from mlgame.view.decorator import check_game_progress, check_game_result
 from mlgame.view.view_model import create_text_view_data, Scene, create_scene_progress_data
 from .game_object import (
     Ball, Blocker, Platform, PlatformAction, SERVE_BALL_ACTIONS
@@ -14,8 +15,8 @@ DRAW_BALL_SPEED = 40
 
 class PingPong(PaiaGame):
 
-    def __init__(self, difficulty, game_over_score):
-        super().__init__()
+    def __init__(self, difficulty, game_over_score,user_num=2,*args,**kwargs):
+        super().__init__(user_num=user_num)
         self._difficulty = difficulty
         self._score = [0, 0]
         self._game_over_score = game_over_score
@@ -46,8 +47,8 @@ class PingPong(PaiaGame):
         self._ball.stick_on_platform(self._platform_1P.rect, self._platform_2P.rect)
 
     def update(self, commands):
-        ai_1p_cmd = commands[self.ai_clients()[0]["name"]]
-        ai_2p_cmd = commands[self.ai_clients()[1]["name"]]
+        ai_1p_cmd = commands[get_ai_name(0)]
+        ai_2p_cmd = commands[get_ai_name(1)]
         command_1P = (PlatformAction(ai_1p_cmd)
                       if ai_1p_cmd in PlatformAction.__members__ else PlatformAction.NONE)
         command_2P = (PlatformAction(ai_2p_cmd)
@@ -127,7 +128,7 @@ class PingPong(PaiaGame):
         self._ball.move()
         self._ball.check_bouncing(self._platform_1P, self._platform_2P, self._blocker)
 
-    def game_to_player_data(self) -> dict:
+    def get_data_from_game_to_player(self) -> dict:
         to_players_data = {}
         scene_info = {
             "frame": self._frame_count,
@@ -145,8 +146,8 @@ class PingPong(PaiaGame):
         else:
             scene_info["blocker"] = (0, 0)
 
-        for ai_client in self.ai_clients():
-            to_players_data[ai_client['name']] = scene_info
+        to_players_data[get_ai_name(0)] = scene_info
+        to_players_data[get_ai_name(1)] = scene_info
 
         return to_players_data
 
@@ -221,14 +222,14 @@ class PingPong(PaiaGame):
         if self._score[0] > self._score[1]:
             attachment = [
                 {
-                    "player": self.ai_clients()[0]["name"],
+                    "player": get_ai_name(0),
                     "rank": 1,
                     "score": self._score[0],
                     "status": "GAME_PASS",
                     "ball_speed": self._ball.speed,
                 },
                 {
-                    "player": self.ai_clients()[1]["name"],
+                    "player": get_ai_name(1),
                     "rank": 2,
                     "score": self._score[1],
                     "status": "GAME_OVER",
@@ -239,14 +240,14 @@ class PingPong(PaiaGame):
         elif self._score[0] < self._score[1]:
             attachment = [
                 {
-                    "player": self.ai_clients()[0]["name"],
+                    "player": get_ai_name(0),
                     "rank": 2,
                     "score": self._score[0],
                     "status": "GAME_OVER",
                     "ball_speed": self._ball.speed,
                 },
                 {
-                    "player": self.ai_clients()[1]["name"],
+                    "player": get_ai_name(1),
                     "rank": 1,
                     "score": self._score[1],
                     "status": "GAME_PASS",
@@ -257,14 +258,14 @@ class PingPong(PaiaGame):
         else:
             attachment = [
                 {
-                    "player": self.ai_clients()[0]["name"],
+                    "player": get_ai_name(0),
                     "rank": 1,
                     "score": self._score[0],
                     "status": "GAME_DRAW",
                     "ball_speed": self._ball.speed,
                 },
                 {
-                    "player": self.ai_clients()[1]["name"],
+                    "player": get_ai_name(1),
                     "rank": 1,
                     "score": self._score[1],
                     "status": "GAME_DRAW",
@@ -306,19 +307,8 @@ class PingPong(PaiaGame):
         else:
             cmd_2P = PlatformAction.NONE
 
-        ai_1p = self.ai_clients()[0]["name"]
-        ai_2p = self.ai_clients()[1]["name"]
+        ai_1p = get_ai_name(0)
+        ai_2p = get_ai_name(1)
 
         return {ai_1p: cmd_1P, ai_2p: cmd_2P}
 
-    @staticmethod
-    def ai_clients():
-        """
-        let MLGame know how to parse your ai,
-        you can also use this names to get different cmd and send different data to each ai client
-        """
-        # TODO refactor name of ai client
-        return [
-            {"name": "ml_1P", "args": ("1P",)},
-            {"name": "ml_2P", "args": ("2P",)}
-        ]

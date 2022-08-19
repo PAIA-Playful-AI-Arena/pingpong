@@ -7,6 +7,9 @@
     "./asset/logo.svg",
     "https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/Paia-Desktop/master/media/pingpong.svg"
   ],
+  "user_num": {
+    "min": 2,"max": 2
+  },
   "game_params": [
     {
       "name": "difficulty",
