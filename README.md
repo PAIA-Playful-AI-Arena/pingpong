@@ -30,7 +30,7 @@ game = PingPong(difficulty="EASY", game_over_score=5)
     - `EASY`：簡單的乒乓球遊戲
     - `NORMAL`：加入切球機制
     - `HARD`：加入切球機制與障礙物
-- `game_over_score [選填]`：指定遊戲結束的分數。當任一方得到指定的分數時，就結束遊戲。預設是 3，但如果啟動遊戲時有指定 -1
+- `game_over_score`：指定遊戲結束的分數。當任一方得到指定的分數時，就結束遊戲。預設是 3，但如果啟動遊戲時有指定 -1
   選項，則結束分數會是 1。
 
 ## 玩法
@@ -159,7 +159,10 @@ class MLPlay:
   ```json
 
     {"game_params": 
-      {"difficulty": "HARD", "game_over_score": 3}
+      {
+        "difficulty": "HARD",
+        "game_over_score": 3
+      }
     }
 
     ```
