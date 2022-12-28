@@ -1,6 +1,6 @@
 {
   "game_name": "pingpong",
-  "version": "2.3.1",
+  "version": "2.4.1",
   "url": "https://github.com/PAIA-Playful-AI-Arena/pingpong",
   "description": "想要體驗一場有趣且刺激的乒乓球遊戲嗎？操控發球及反擊的時機讓對手無路可逃，喜歡快節奏的你一定要來體驗看看！",
   "logo": [
@@ -42,6 +42,16 @@
       "max": 15,
       "help": "[Optional] The score that the game will be exited when either side reaches it.[default: %(default)s]",
       "default": 3
+    },
+    {
+      "name": "init_vel",
+      "flag": "v",
+      "verbose": "起始球速",
+      "type": "int",
+      "min": 1,
+      "max": 30,
+      "help": "[Optional] The initial velocity of the ball. [default: %(default)s]",
+      "default": 7
     }
   ]
 }

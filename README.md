@@ -23,15 +23,17 @@
 
 ```python
 # main.py 
-game = PingPong(difficulty="EASY", game_over_score=5)
+game = PingPong(difficulty="EASY", game_over_score=5,user_num=2,init_vel=7)
+
 ```
 
 - `difficulty`：遊戲難度
     - `EASY`：簡單的乒乓球遊戲
     - `NORMAL`：加入切球機制
     - `HARD`：加入切球機制與障礙物
-- `game_over_score`：指定遊戲結束的分數。當任一方得到指定的分數時，就結束遊戲。預設是 3，但如果啟動遊戲時有指定 -1
-  選項，則結束分數會是 1。
+- `game_over_score`：指定遊戲結束的分數。當任一方得到指定的分數時，就結束遊戲。預設是 `3`，但如果啟動遊戲時有指定 `-1`
+  選項，則結束分數會是 `1`。
+- `init_vel`：設定初始球的 `X` 與 `Y` 速度。 預設為 `7`。
 
 ## 玩法
 
@@ -111,7 +113,7 @@ game = PingPong(difficulty="EASY", game_over_score=5)
 
 ```bash
 # 在 pingpong 資料夾中打開終端機 
-python -m mlgame -i ./ml/ml_play_template_1P.py -i ./ml/ml_play_template_2P.py  ./ --difficulty HARD --game_over_score 3 
+python -m mlgame -i ./ml/ml_play_template_1P.py -i ./ml/ml_play_template_2P.py  ./ --difficulty HARD --game_over_score 3  --init_vel 10
 ```
 
 ## ＡＩ範例
