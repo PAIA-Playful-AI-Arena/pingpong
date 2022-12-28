@@ -15,7 +15,7 @@ DRAW_BALL_SPEED = 40
 
 class PingPong(PaiaGame):
 
-    def __init__(self, difficulty, game_over_score,user_num=2,*args,**kwargs):
+    def __init__(self, difficulty, game_over_score,user_num=2,init_vel=7,*args,**kwargs):
         super().__init__(user_num=user_num)
         self._difficulty = difficulty
         self._score = [0, 0]
@@ -24,14 +24,14 @@ class PingPong(PaiaGame):
         self._game_status = GameStatus.GAME_ALIVE
         self._ball_served = False
         self._ball_served_frame = 0
-        self.scene = Scene(width=200, height=500, color="#000000", bias_x=0, bias_y=0)
+        self._init_vel = init_vel
+        self.scene = Scene(width=200, height=500, color="#424242", bias_x=0, bias_y=0)
         self._create_init_scene()
-
     def _create_init_scene(self):
         self._draw_group = pygame.sprite.RenderPlain()
 
         enable_slice_ball = False if self._difficulty == "EASY" else True
-        self._ball = Ball(pygame.Rect(0, 0, 200, 500), enable_slice_ball, self._draw_group)
+        self._ball = Ball(pygame.Rect(0, 0, 200, 500), enable_slice_ball, self._draw_group, init_vel=self._init_vel)
         self._platform_1P = Platform((80, 420),
                                      pygame.Rect(0, 0, 200, 500), "1P", self._draw_group)
         self._platform_2P = Platform((80, 70),

@@ -1,9 +1,9 @@
+import random
+
+import pygame
+
 from mlgame.game import physics
 from mlgame.utils.enum import StringEnum, auto
-
-from pygame.math import Vector2
-import pygame
-import random
 
 PLATFORM_W = 40
 PLATFORM_H = 10
@@ -115,9 +115,9 @@ class Blocker(pygame.sprite.Sprite):
 
 
 class Ball(pygame.sprite.Sprite):
-    def __init__(self, play_area_rect: pygame.Rect, enable_slide_ball: bool, *groups):
+    def __init__(self, play_area_rect: pygame.Rect, enable_slide_ball: bool, *groups, init_vel=7):
         super().__init__(*groups)
-
+        self._init_vel = init_vel
         self._play_area_rect = play_area_rect
         self._speed = [0, 0]
         self._size = [5, 5]
@@ -163,11 +163,11 @@ class Ball(pygame.sprite.Sprite):
         Set the ball speed according to the action of ball serving
         """
         self._speed[0] = {
-            PlatformAction.SERVE_TO_LEFT: -7,
-            PlatformAction.SERVE_TO_RIGHT: 7,
+            PlatformAction.SERVE_TO_LEFT: -self._init_vel,
+            PlatformAction.SERVE_TO_RIGHT: self._init_vel,
         }.get(serve_ball_action)
 
-        self._speed[1] = -7 if self.serve_from_1P else 7
+        self._speed[1] = -self._init_vel if self.serve_from_1P else self._init_vel
 
     def move(self):
         self.last_pos.topleft = self.rect.topleft

@@ -42,6 +42,16 @@
       "max": 15,
       "help": "[Optional] The score that the game will be exited when either side reaches it.[default: %(default)s]",
       "default": 3
+    },
+    {
+      "name": "init_vel",
+      "flag": "v",
+      "verbose": "起始球速",
+      "type": "int",
+      "min": 1,
+      "max": 30,
+      "help": "[Optional] The initial velocity of the ball. [default: %(default)s]",
+      "default": 7
     }
   ]
 }
