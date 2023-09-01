@@ -90,7 +90,7 @@ game = PingPong(difficulty="EASY", game_over_score=5,user_num=2,init_vel=7)
 
 3. 座標系統 (物件座標皆為左上角座標)
     - 螢幕大小 200 x 500
-    - 板子 40 x 30
+    - 板子 40 x 10
     - 球 5 x 5
     - 障礙物 30 x 20
       <img src="https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/pingpong/main/asset/github/%E6%89%93%E4%B9%92%E4%B9%93-%E5%BA%A7%E6%A8%99%E5%9C%96.png" height="500"/>

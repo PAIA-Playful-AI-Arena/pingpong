@@ -48,7 +48,7 @@ Same as the game "Arkanoid"
 
 #### Platform
 
-* The platform is a 40-by-30-pixel rectangle.
+* The platform is a 40-by-10-pixel rectangle.
 * The color of the 1P platform is red, and it of the 2P platform is blue.
 * The moving speed is (&plusmn;5, 0) pixels per frame.
 * The initial position of the 1P platform is at (80, 420), and it of the 2P platform is at (80, 50).
