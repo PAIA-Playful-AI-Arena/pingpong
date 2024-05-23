@@ -1,4 +1,6 @@
 export tag=latest
+export game="pingpong"
+
 docker build \
--t pingpong:${tag} \
+-t ${game}:${tag} \
 -f ./Dockerfile .
