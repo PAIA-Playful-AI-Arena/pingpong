@@ -4,6 +4,7 @@ import pygame
 
 from mlgame.game import physics
 from mlgame.utils.enum import StringEnum, auto
+from mlgame.view.view_model import create_image_view_data
 
 PLATFORM_W = 40
 PLATFORM_H = 10
@@ -36,12 +37,12 @@ class Platform(pygame.sprite.Sprite):
         self.rect = pygame.Rect(*init_pos, PLATFORM_W, PLATFORM_H)
 
         if side == "1P":
-            self._color = Platform.COLOR_1P
+            self.img_id = "board_1p"
         elif side == "2P":
-            self._color = Platform.COLOR_2P
+            self.img_id = "board_2p"
             # self.rect.move_ip(0, -PLATFORM_H)
         else:
-            self._color = Platform.COLOR_1P
+            self.img_id = "board_1p"
 
     @property
     def pos(self):
@@ -64,13 +65,13 @@ class Platform(pygame.sprite.Sprite):
 
     @property
     def get_object_data(self):
-        return {"type": "rect",
-                "name": "platform",
-                "x": self.rect.x,
-                "y": self.rect.y,
-                "width": self.rect.width,
-                "height": self.rect.height,
-                "color": self._color}
+        return create_image_view_data(
+            self.img_id,
+            self.rect.x,
+            self.rect.y,
+            self.rect.width,
+            self.rect.height,
+        )
 
 
 class Blocker(pygame.sprite.Sprite):
@@ -105,13 +106,20 @@ class Blocker(pygame.sprite.Sprite):
 
     @property
     def get_object_data(self):
-        return {"type": "rect",
-                "name": "blocker",
-                "x": self.rect.x,
-                "y": self.rect.y,
-                "width": self.rect.width,
-                "height": self.rect.height,
-                "color": self._color}
+        return create_image_view_data(
+            "obstacle",
+            self.rect.x,
+            self.rect.y,
+            self.rect.width,
+            self.rect.height,
+        )
+        # return {"type": "rect",
+        #         "name": "blocker",
+        #         "x": self.rect.x,
+        #         "y": self.rect.y,
+        #         "width": self.rect.width,
+        #         "height": self.rect.height,
+        #         "color": self._color}
 
 
 class Ball(pygame.sprite.Sprite):
@@ -120,7 +128,7 @@ class Ball(pygame.sprite.Sprite):
         self._init_vel = init_vel
         self._play_area_rect = play_area_rect
         self._speed = [0, 0]
-        self._size = [5, 5]
+        self._size = [11, 11]
         self._do_slide_ball = enable_slide_ball
 
         self.serve_from_1P = True
@@ -243,10 +251,17 @@ class Ball(pygame.sprite.Sprite):
 
     @property
     def get_object_data(self):
-        return {"type": "rect",
-                "name": "ball",
-                "x": self.rect.x,
-                "y": self.rect.y,
-                "width": self.rect.width,
-                "height": self.rect.height,
-                "color": self._color}
+        return create_image_view_data(
+            "ball",
+            self.rect.x,
+            self.rect.y,
+            self.rect.width,
+            self.rect.height,
+        )
+        # return {"type": "rect",
+        #         "name": "ball",
+        #         "x": self.rect.x,
+        #         "y": self.rect.y,
+        #         "width": self.rect.width,
+        #         "height": self.rect.height,
+        #         "color": self._color}

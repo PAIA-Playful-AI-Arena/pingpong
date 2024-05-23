@@ -5,7 +5,8 @@ import pygame
 from mlgame.game.paia_game import PaiaGame, GameStatus, GameResultState
 from mlgame.utils.enum import get_ai_name
 from mlgame.view.decorator import check_game_progress, check_game_result
-from mlgame.view.view_model import create_text_view_data, Scene, create_scene_progress_data
+from mlgame.view.view_model import create_text_view_data, Scene, create_scene_progress_data, create_asset_init_data
+from .env import BOARD1P_PATH, BALL_PATH, OBSTACLE_PATH, BOARD2P_PATH, BOARD1P_URL, BOARD2P_URL, BALL_URL, OBSTACLE_URL
 from .game_object import (
     Ball, Blocker, Platform, PlatformAction, SERVE_BALL_ACTIONS
 )
@@ -15,7 +16,7 @@ DRAW_BALL_SPEED = 40
 
 class PingPong(PaiaGame):
 
-    def __init__(self, difficulty, game_over_score,user_num=2,init_vel=7,*args,**kwargs):
+    def __init__(self, difficulty, game_over_score, user_num=2, init_vel=7, *args, **kwargs):
         super().__init__(user_num=user_num)
         self._difficulty = difficulty
         self._score = [0, 0]
@@ -25,8 +26,9 @@ class PingPong(PaiaGame):
         self._ball_served = False
         self._ball_served_frame = 0
         self._init_vel = init_vel
-        self.scene = Scene(width=200, height=500, color="#424242", bias_x=0, bias_y=0)
+        self.scene = Scene(width=200, height=500, color="#215282", bias_x=0, bias_y=0)
         self._create_init_scene()
+
     def _create_init_scene(self):
         self._draw_group = pygame.sprite.RenderPlain()
 
@@ -135,8 +137,8 @@ class PingPong(PaiaGame):
             "status": self.get_game_status(),
             "ball": self._ball.pos,
             "ball_speed": self._ball.speed,
-            "ball_served":self._ball_served,
-            "serving_side":"1P" if self._ball.serve_from_1P else "2P",
+            "ball_served": self._ball_served,
+            "serving_side": "1P" if self._ball.serve_from_1P else "2P",
             "platform_1P": self._platform_1P.pos,
             "platform_2P": self._platform_2P.pos
         }
@@ -183,9 +185,16 @@ class PingPong(PaiaGame):
         return self._game_status != GameStatus.GAME_OVER
 
     def get_scene_init_data(self) -> dict:
-        scene_init_data = {"scene": self.scene.__dict__, "assets": [
-
-        ]}
+        scene_init_data = {
+            "scene": self.scene.__dict__,
+            "assets": [
+                create_asset_init_data("board_1p", 40, 10, BOARD1P_PATH, BOARD1P_URL),
+                create_asset_init_data("board_2p", 40, 10, BOARD2P_PATH, BOARD2P_URL),
+                create_asset_init_data("ball", 11, 11, BALL_PATH, BALL_URL),
+                create_asset_init_data("obstacle", 30, 20, OBSTACLE_PATH, OBSTACLE_URL),
+            ],
+            "background": []
+        }
         return scene_init_data
 
     @check_game_progress
@@ -195,13 +204,13 @@ class PingPong(PaiaGame):
         create_1p_score = create_text_view_data("1P: " + str(self._score[0]),
                                                 1,
                                                 self.scene.height - 21,
-                                                Platform.COLOR_1P,
+                                                "#FF4A4A",
                                                 "18px Arial BOLD"
                                                 )
         create_2p_score = create_text_view_data("2P: " + str(self._score[1]),
                                                 1,
                                                 4,
-                                                Platform.COLOR_2P,
+                                                "#2DB9D7",
                                                 "18px Arial BOLD"
                                                 )
         create_speed_text = create_text_view_data("Speed: " + str(self._ball.speed),
@@ -311,4 +320,3 @@ class PingPong(PaiaGame):
         ai_2p = get_ai_name(1)
 
         return {ai_1p: cmd_1P, ai_2p: cmd_2P}
-
