@@ -1,4 +1,4 @@
-export tag=latest
+export tag="latest"
 export game="pingpong"
 
 docker run -it --rm --name ${game} \
