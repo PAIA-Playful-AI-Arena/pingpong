@@ -3,7 +3,7 @@ pipeline {
         label 'HP_Docker_Agent'
     }
     environment {
-        game = 'pingpong'
+        game = 'arkanoid'
         REPO = "https://github.com/PAIA-Playful-AI-Arena/${game}.git"
         registry = 'paiatech'
     }
@@ -35,7 +35,7 @@ pipeline {
                 echo 'build'
                 script {
                   sh "docker buildx ls"
-                  if (branch == 'main' && latestTag) {
+                  if (branch == 'main' && env.tag) {
                     sh """docker buildx build --builder=mybuilder --platform linux/amd64,linux/arm64 \
                       -t ${env.registry}/${game}:${env.tag} \
                       -t ${env.registry}/${game}:${env.branch} \
