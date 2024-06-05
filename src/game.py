@@ -231,14 +231,14 @@ class PingPong(PaiaGame):
         if self._score[0] > self._score[1]:
             attachment = [
                 {
-                    "player": get_ai_name(0),
+                    "player_num": get_ai_name(0),
                     "rank": 1,
                     "score": self._score[0],
                     "status": "GAME_PASS",
                     "ball_speed": self._ball.speed,
                 },
                 {
-                    "player": get_ai_name(1),
+                    "player_num": get_ai_name(1),
                     "rank": 2,
                     "score": self._score[1],
                     "status": "GAME_OVER",
@@ -249,14 +249,14 @@ class PingPong(PaiaGame):
         elif self._score[0] < self._score[1]:
             attachment = [
                 {
-                    "player": get_ai_name(0),
+                    "player_num": get_ai_name(0),
                     "rank": 2,
                     "score": self._score[0],
                     "status": "GAME_OVER",
                     "ball_speed": self._ball.speed,
                 },
                 {
-                    "player": get_ai_name(1),
+                    "player_num": get_ai_name(1),
                     "rank": 1,
                     "score": self._score[1],
                     "status": "GAME_PASS",
@@ -267,14 +267,14 @@ class PingPong(PaiaGame):
         else:
             attachment = [
                 {
-                    "player": get_ai_name(0),
+                    "player_num": get_ai_name(0),
                     "rank": 1,
                     "score": self._score[0],
                     "status": "GAME_DRAW",
                     "ball_speed": self._ball.speed,
                 },
                 {
-                    "player": get_ai_name(1),
+                    "player_num": get_ai_name(1),
                     "rank": 1,
                     "score": self._score[1],
                     "status": "GAME_DRAW",
