@@ -3,7 +3,7 @@ pipeline {
         label 'HP_Docker_Agent'
     }
     environment {
-        game = 'arkanoid'
+        game = 'pingpong'
         REPO = "https://github.com/PAIA-Playful-AI-Arena/${game}.git"
         registry = 'paiatech'
     }
