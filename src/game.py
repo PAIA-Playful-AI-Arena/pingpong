@@ -283,7 +283,7 @@ class PingPong(PaiaGame):
             ]
         return {
             "frame_used": self._frame_count,
-            "state": GameResultState.FINISH,
+            "status": GameResultState.FINISH,
             "attachment": attachment
 
         }
