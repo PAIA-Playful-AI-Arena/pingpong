@@ -5,11 +5,14 @@ import pygame
 from mlgame.game.paia_game import PaiaGame, GameStatus, GameResultState
 from mlgame.utils.enum import get_ai_name
 from mlgame.view.decorator import check_game_progress, check_game_result
-from mlgame.view.view_model import create_text_view_data, Scene, create_scene_progress_data, create_asset_init_data
-from .env import BOARD1P_PATH, BALL_PATH, OBSTACLE_PATH, BOARD2P_PATH, BOARD1P_URL, BOARD2P_URL, BALL_URL, OBSTACLE_URL
+from mlgame.view.view_model import create_text_view_data, Scene, create_scene_progress_data, create_asset_init_data, \
+    create_image_view_data
+from .env import BOARD1P_PATH, BALL_PATH, OBSTACLE_PATH, BOARD2P_PATH, BOARD1P_URL, BOARD2P_URL, BALL_URL, OBSTACLE_URL, \
+    BG_PATH, BG_URL, BG_LEFT_WIDTH
 from .game_object import (
     Ball, Blocker, Platform, PlatformAction, SERVE_BALL_ACTIONS
 )
+from .utils import shift_left_with_bg_width
 
 DRAW_BALL_SPEED = 40
 
@@ -26,24 +29,24 @@ class PingPong(PaiaGame):
         self._ball_served = False
         self._ball_served_frame = 0
         self._init_vel = init_vel
-        self.scene = Scene(width=200, height=500, color="#215282", bias_x=0, bias_y=0)
+        self.scene = Scene(width=1000, height=500, color="#73A343", bias_x=0, bias_y=0)
         self._create_init_scene()
 
     def _create_init_scene(self):
         self._draw_group = pygame.sprite.RenderPlain()
 
         enable_slice_ball = False if self._difficulty == "EASY" else True
-        self._ball = Ball(pygame.Rect(0, 0, 200, 500), enable_slice_ball, self._draw_group, init_vel=self._init_vel)
-        self._platform_1P = Platform((80, 420),
-                                     pygame.Rect(0, 0, 200, 500), "1P", self._draw_group)
-        self._platform_2P = Platform((80, 70),
-                                     pygame.Rect(0, 0, 200, 500), "2P", self._draw_group)
+        self._ball = Ball(pygame.Rect(BG_LEFT_WIDTH+0, 0, 200, 500), enable_slice_ball, self._draw_group, init_vel=self._init_vel)
+        self._platform_1P = Platform((BG_LEFT_WIDTH+80, 420),
+                                     pygame.Rect(BG_LEFT_WIDTH+0, 0, 200, 500), "1P", self._draw_group)
+        self._platform_2P = Platform((BG_LEFT_WIDTH+80, 70),
+                                     pygame.Rect(BG_LEFT_WIDTH+0, 0, 200, 500), "2P", self._draw_group)
 
         if self._difficulty != "HARD":
             # Put the blocker at the end of the world
-            self._blocker = Blocker(1000, pygame.Rect(0, 0, 200, 500), self._draw_group)
+            self._blocker = Blocker(1000, pygame.Rect(BG_LEFT_WIDTH+0, 0, 200, 500), self._draw_group)
         else:
-            self._blocker = Blocker(240, pygame.Rect(0, 0, 200, 500), self._draw_group)
+            self._blocker = Blocker(240, pygame.Rect(BG_LEFT_WIDTH+0, 0, 200, 500), self._draw_group)
 
         # Initialize the position of the ball
         self._ball.stick_on_platform(self._platform_1P.rect, self._platform_2P.rect)
@@ -135,16 +138,16 @@ class PingPong(PaiaGame):
         scene_info = {
             "frame": self._frame_count,
             "status": self.get_game_status(),
-            "ball": self._ball.pos,
+            "ball": shift_left_with_bg_width(self._ball.pos),
             "ball_speed": self._ball.speed,
             "ball_served": self._ball_served,
             "serving_side": "1P" if self._ball.serve_from_1P else "2P",
-            "platform_1P": self._platform_1P.pos,
-            "platform_2P": self._platform_2P.pos
+            "platform_1P": shift_left_with_bg_width(self._platform_1P.pos),
+            "platform_2P": shift_left_with_bg_width(self._platform_2P.pos)
         }
 
         if self._difficulty == "HARD":
-            scene_info["blocker"] = self._blocker.pos
+            scene_info["blocker"] = shift_left_with_bg_width(self._blocker.pos)
         else:
             scene_info["blocker"] = (0, 0)
 
@@ -192,8 +195,12 @@ class PingPong(PaiaGame):
                 create_asset_init_data("board_2p", 40, 10, BOARD2P_PATH, BOARD2P_URL),
                 create_asset_init_data("ball", 11, 11, BALL_PATH, BALL_URL),
                 create_asset_init_data("obstacle", 30, 20, OBSTACLE_PATH, OBSTACLE_URL),
+                create_asset_init_data("bg", 1000, 500, BG_PATH, BG_URL),
             ],
-            "background": []
+            "background": [
+                create_image_view_data("bg", 0, 0, 1000, 500),
+
+            ]
         }
         return scene_init_data
 
@@ -231,14 +238,14 @@ class PingPong(PaiaGame):
         if self._score[0] > self._score[1]:
             attachment = [
                 {
-                    "player": get_ai_name(0),
+                    "player_num": get_ai_name(0),
                     "rank": 1,
                     "score": self._score[0],
                     "status": "GAME_PASS",
                     "ball_speed": self._ball.speed,
                 },
                 {
-                    "player": get_ai_name(1),
+                    "player_num": get_ai_name(1),
                     "rank": 2,
                     "score": self._score[1],
                     "status": "GAME_OVER",
@@ -249,14 +256,14 @@ class PingPong(PaiaGame):
         elif self._score[0] < self._score[1]:
             attachment = [
                 {
-                    "player": get_ai_name(0),
+                    "player_num": get_ai_name(0),
                     "rank": 2,
                     "score": self._score[0],
                     "status": "GAME_OVER",
                     "ball_speed": self._ball.speed,
                 },
                 {
-                    "player": get_ai_name(1),
+                    "player_num": get_ai_name(1),
                     "rank": 1,
                     "score": self._score[1],
                     "status": "GAME_PASS",
@@ -267,14 +274,14 @@ class PingPong(PaiaGame):
         else:
             attachment = [
                 {
-                    "player": get_ai_name(0),
+                    "player_num": get_ai_name(0),
                     "rank": 1,
                     "score": self._score[0],
                     "status": "GAME_DRAW",
                     "ball_speed": self._ball.speed,
                 },
                 {
-                    "player": get_ai_name(1),
+                    "player_num": get_ai_name(1),
                     "rank": 1,
                     "score": self._score[1],
                     "status": "GAME_DRAW",
@@ -283,7 +290,7 @@ class PingPong(PaiaGame):
             ]
         return {
             "frame_used": self._frame_count,
-            "state": GameResultState.FINISH,
+            "status": GameResultState.FINISH,
             "attachment": attachment
 
         }

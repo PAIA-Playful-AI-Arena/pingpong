@@ -236,7 +236,7 @@ class MLPlay:
   "state": "FINISH",
   "attachment": [
     {
-      "player": "ml_1P",
+      "player_num": "ml_1P",
       "rank": 1,
       "score": 1,
       "status": "GAME_PASS",
@@ -246,7 +246,7 @@ class MLPlay:
       ]
     },
     {
-      "player": "ml_2P",
+      "player_num": "ml_2P",
       "rank": 2,
       "score": 0,
       "status": "GAME_OVER",
