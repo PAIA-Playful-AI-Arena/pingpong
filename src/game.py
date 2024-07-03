@@ -209,24 +209,30 @@ class PingPong(PaiaGame):
         game_obj_list = [obj.get_object_data for obj in self._draw_group]
 
         create_1p_score = create_text_view_data("1P: " + str(self._score[0]),
-                                                1,
+                                                BG_LEFT_WIDTH+21,
                                                 self.scene.height - 21,
-                                                "#FF4A4A",
+                                                "#FC0000",
                                                 "18px Arial BOLD"
                                                 )
         create_2p_score = create_text_view_data("2P: " + str(self._score[1]),
-                                                1,
+                                                BG_LEFT_WIDTH+21,
                                                 4,
-                                                "#2DB9D7",
+                                                "#0055FB",
                                                 "18px Arial BOLD"
                                                 )
-        create_speed_text = create_text_view_data("Speed: " + str(self._ball.speed),
-                                                  self.scene.width - 120,
+        speed_text_1P = create_text_view_data("Speed: " + str(self._ball.speed),
+                                                  self.scene.width- BG_LEFT_WIDTH - 130,
                                                   self.scene.height - 21,
                                                   "#FFFFFF",
                                                   "18px Arial BOLD"
                                                   )
-        foreground = [create_1p_score, create_2p_score, create_speed_text]
+        speed_text_2P = create_text_view_data("Speed: " + str(self._ball.speed),
+                                                  self.scene.width- BG_LEFT_WIDTH - 130,
+                                                  4,
+                                                  "#FFFFFF",
+                                                  "18px Arial BOLD"
+                                                  )
+        foreground = [create_1p_score, create_2p_score, speed_text_1P,speed_text_2P]
 
         scene_progress = create_scene_progress_data(frame=self._frame_count, object_list=game_obj_list,
                                                     foreground=foreground)
