@@ -128,7 +128,7 @@ class Ball(pygame.sprite.Sprite):
         self._init_vel = init_vel
         self._play_area_rect = play_area_rect
         self._speed = [0, 0]
-        self._size = [11, 11]
+        self._size = [10, 10]
         self._do_slide_ball = enable_slide_ball
 
         self.serve_from_1P = True
